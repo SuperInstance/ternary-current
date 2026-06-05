@@ -1,0 +1,6 @@
+[package]
+name = "ternary-current"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Information flow and momentum through ternary fleet topologies"
