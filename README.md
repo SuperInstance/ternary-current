@@ -100,3 +100,11 @@ Part of the SuperInstance ternary fleet library. This is the *information flow* 
 ## License
 
 MIT
+
+## See Also
+- **ternary-flux** — related
+- **ternary-energy** — related
+- **ternary-network** — related
+- **ternary-graph** — related
+- **ternary-mesh** — related
+
