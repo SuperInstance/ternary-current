@@ -289,9 +289,7 @@ impl DownstreamConsumer {
     pub fn total_strength(&self) -> CurrentStrength {
         self.received
             .iter()
-            .fold(CurrentStrength::zero(), |acc, c| {
-                acc.combine(c.strength())
-            })
+            .fold(CurrentStrength::zero(), |acc, c| acc.combine(c.strength()))
     }
 }
 
@@ -365,7 +363,10 @@ mod tests {
 
     #[test]
     fn flow_direction_from_ternary() {
-        assert_eq!(FlowDirection::from_ternary(-1), Some(FlowDirection::Against));
+        assert_eq!(
+            FlowDirection::from_ternary(-1),
+            Some(FlowDirection::Against)
+        );
         assert_eq!(FlowDirection::from_ternary(2), None);
     }
 
@@ -409,7 +410,10 @@ mod tests {
     fn current_map_set_get() {
         let mut map = CurrentMap::new();
         let room = RoomId::new(1);
-        map.set(room, Current::new(FlowDirection::With, CurrentStrength::new(100)));
+        map.set(
+            room,
+            Current::new(FlowDirection::With, CurrentStrength::new(100)),
+        );
         assert!(map.get(room).is_some());
         assert_eq!(map.room_count(), 1);
     }
@@ -419,8 +423,14 @@ mod tests {
         let mut map = CurrentMap::new();
         let r1 = RoomId::new(1);
         let r2 = RoomId::new(2);
-        map.set(r1, Current::new(FlowDirection::With, CurrentStrength::new(50)));
-        map.set(r2, Current::new(FlowDirection::Still, CurrentStrength::zero()));
+        map.set(
+            r1,
+            Current::new(FlowDirection::With, CurrentStrength::new(50)),
+        );
+        map.set(
+            r2,
+            Current::new(FlowDirection::Still, CurrentStrength::zero()),
+        );
         let active = map.active_rooms();
         assert_eq!(active.len(), 1);
         assert!(active.contains(&r1));
@@ -431,8 +441,14 @@ mod tests {
         let mut map = CurrentMap::new();
         let r1 = RoomId::new(1);
         let r2 = RoomId::new(2);
-        map.set(r1, Current::new(FlowDirection::With, CurrentStrength::new(30)));
-        map.set(r2, Current::new(FlowDirection::Against, CurrentStrength::new(90)));
+        map.set(
+            r1,
+            Current::new(FlowDirection::With, CurrentStrength::new(30)),
+        );
+        map.set(
+            r2,
+            Current::new(FlowDirection::Against, CurrentStrength::new(90)),
+        );
         assert_eq!(map.strongest(), Some(r2));
     }
 
@@ -454,8 +470,7 @@ mod tests {
 
     #[test]
     fn upstream_source_custom_strength() {
-        let src = UpstreamSource::new(RoomId::new(1))
-            .with_strength(CurrentStrength::new(42));
+        let src = UpstreamSource::new(RoomId::new(1)).with_strength(CurrentStrength::new(42));
         let c = src.emit(FlowDirection::Against).unwrap();
         assert_eq!(c.strength().value(), 42);
     }
@@ -464,7 +479,10 @@ mod tests {
     fn downstream_consumer_receive() {
         let mut consumer = DownstreamConsumer::new(RoomId::new(2), 3);
         assert!(consumer.receive(Current::new(FlowDirection::With, CurrentStrength::new(10))));
-        assert!(consumer.receive(Current::new(FlowDirection::Against, CurrentStrength::new(20))));
+        assert!(consumer.receive(Current::new(
+            FlowDirection::Against,
+            CurrentStrength::new(20)
+        )));
         assert_eq!(consumer.received_count(), 2);
     }
 
@@ -531,7 +549,10 @@ mod tests {
     fn current_map_remove() {
         let mut map = CurrentMap::new();
         let r = RoomId::new(1);
-        map.set(r, Current::new(FlowDirection::Still, CurrentStrength::new(10)));
+        map.set(
+            r,
+            Current::new(FlowDirection::Still, CurrentStrength::new(10)),
+        );
         map.remove(r);
         assert_eq!(map.room_count(), 0);
     }
